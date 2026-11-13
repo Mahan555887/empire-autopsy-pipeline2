@@ -1,0 +1,33 @@
+# تنظیمات عمومی خط تولید — مستقل از کانال
+version: 1
+language: fa # زبان گزارش‌ها و پیام‌های تأیید (فارسی)
+
+telegram:
+  # نام Secret‌ها؛ مقدارها فقط در GitHub Secrets هستند
+  token_env: TELEGRAM_BOT_TOKEN
+  chat_id_env: TELEGRAM_CHAT_ID
+  api_base: https://api.telegram.org
+
+approval:
+  required: true
+  # تصمیم قطعی فاز ۲: بررسی هر ۵ دقیقه، بدون Cloudflare
+  # (کرون GitHub Actions حداقل ۵ دقیقه است و ممکن است چند دقیقه تأخیر داشته باشد)
+  poll_interval_minutes: 5
+  timeout_hours: 24
+  # حداکثر طول خلاصهٔ فارسی داخل پیام تلگرام
+  summary_max_chars: 700
+  buttons:
+    approve: "✅ تأیید"
+    reject: "❌ رد"
+  # پیام تأیید: خلاصهٔ فارسی محتوای ویدئو همراه دکمه‌های فارسی
+  message_template: |
+    🎬 کانال: {channel_name}
+    📌 موضوع: {topic}
+
+    📝 خلاصهٔ فارسی ویدئو:
+    {summary_fa}
+
+    ⏱ مدت: {duration_minutes} دقیقه
+    🎞 فایل پیش‌نمایش: {preview_url}
+
+    یکی از دکمه‌ها را بزنید: {approve_label}   یا   {reject_label}

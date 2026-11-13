@@ -1,0 +1,35 @@
+name: بررسی تأیید تلگرام
+
+# تصمیم فاز ۲: تأیید تلگرام با بررسی هر ۵ دقیقه و بدون Cloudflare.
+# کرون GitHub Actions حداقل هر ۵ دقیقه است و می‌تواند چند دقیقه تأخیر داشته باشد.
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: approval-poll
+  cancel-in-progress: false
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: نصب پروژه
+        run: pip install -e .
+
+      - name: بررسی پاسخ‌های تأیید
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID_EMPIRE_AUTOPSY: ${{ secrets.TELEGRAM_CHAT_ID_EMPIRE_AUTOPSY }}
+        run: python -m autopsy approval poll --channel empire-autopsy

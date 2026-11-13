@@ -1,0 +1,43 @@
+# کانال فعال شمارهٔ ۱ — تنها کانالی که الان ساخته می‌شود
+id: empire-autopsy
+name: "Empire Autopsy"
+enabled: true
+description: "کالبدشکافی سقوط امپراتوری‌های تجاری و برندهای بزرگ"
+language: en # زبان ویدئو و نریشن
+audience: "علاقه‌مندان به کسب‌وکار، تاریخ شرکت‌ها و تحلیل سقوط برندها"
+
+telegram:
+  # اگر خالی بماند، از chat_id_env عمومی در config/settings.yaml استفاده می‌شود
+  chat_id_env: TELEGRAM_CHAT_ID_EMPIRE_AUTOPSY
+
+research:
+  min_sources: 3
+  topics:
+    - "سقوط برندهای بزرگ و شرکت‌های تک‌شاخ"
+    - "امپراتوری‌های تجاری که فروپاشیدند"
+    - "کلاهبرداری‌های شرکتی با پایان تلخ"
+
+script:
+  target_minutes: 10
+  tone: "روایی و مستند، بدون کلیشه و بدون اغراق"
+
+voice:
+  provider: elevenlabs
+  voice_id: "" # در فاز صدا مقداردهی می‌شود
+  model: ""
+
+visuals:
+  style: "مستند آرشیوی، تیره و سینمایی"
+  aspect_ratio: "16:9"
+  resolution: "1920x1080"
+
+publish:
+  platform: youtube
+  privacy: private # انتشار فقط پس از تأیید تلگرام
+  category: Education
+
+# نگاشت نام منطقی → نام Secret در GitHub
+secrets:
+  openai_api_key: OPENAI_API_KEY
+  elevenlabs_api_key: ELEVENLABS_API_KEY
+  youtube_credentials: YOUTUBE_CREDENTIALS_JSON

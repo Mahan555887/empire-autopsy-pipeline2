@@ -1,0 +1,49 @@
+name: خط تولید ویدئو
+
+# اجرای دستی. در فازهای بعد با ورودی موضوع و اجرای کامل تکمیل می‌شود.
+on:
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: "شناسهٔ کانال"
+        required: true
+        default: empire-autopsy
+      topic:
+        description: "موضوع ویدئو (خالی = انتخاب خودکار)"
+        required: false
+        default: ""
+      dry_run:
+        description: "فقط نمایش برنامهٔ مراحل"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: نصب پروژه
+        run: pip install -e .
+
+      - name: اعتبارسنجی پیکربندی
+        run: python -m autopsy config validate
+
+      - name: نمایش برنامهٔ مراحل
+        run: python -m autopsy pipeline plan --channel "${{ inputs.channel }}"
+
+      - name: خلاصه
+        run: |
+          echo "### وضعیت" >> "$GITHUB_STEP_SUMMARY"
+          echo "- کانال: ${{ inputs.channel }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- موضوع: ${{ inputs.topic }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- اجرای آزمایشی: ${{ inputs.dry_run }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- مراحل تولید هنوز پیاده‌سازی نشده‌اند (فاز ۳ به بعد)." >> "$GITHUB_STEP_SUMMARY"
